@@ -2,10 +2,12 @@ module Example
 
   # Helper module for dealing with locale data and unit conversions.
   module Locale
+  
+    extend self
 
     # Model Units set to Meters with precision 0,000:
     #
-    #   Locale.string_to_unit( '123.345cm' ).
+    #   Locale.string_to_unit( '123.345cm' )
     #   => "123,345cm"
     #
     #   Locale.string_to_unit( '123.345cm2' )
@@ -20,8 +22,12 @@ module Example
     # @return [Area] if unit marker ends with 2. ( +'123.cm2'+ )
     # @return [Length] if there is no dimmension marker.
     def self.string_to_unit( string )
+      # Make string easier to parse by normalising characters.
+      data = string.gsub('²','2').gsub('³','3').gsub(/\s+/,'')
       # Parse unit components.
-      match = string.match( /\s?([0-9]+([.,][0-9]*)?)((['"mc]+)([23]?))?$/ )
+      # (!) Add support for km, inch, foot, yard, mile
+      match = data.match( /^([0-9]+([.,][0-9]*)?)((['"mc]+)([23]?))?$/ )
+      #p match # <debug/>
       unless match
         raise ArgumentError, "Cannot convert #{string.inspect} to unit"
       end
@@ -30,10 +36,16 @@ module Example
       unit_full = match[3]
       unit = match[4]
       dimmension = match[5].to_i
+      # <debug>
+      #puts "      Value: #{value}"
+      #puts "Unit (Full): #{unit_full}"
+      #puts "       Unit: #{unit}"
+      #puts " Dimmension: #{dimmension}"
+      # </debug>
       # Convert into appropriate class.
       case dimmension
       when 0
-        @@decimal_separator ||= decimal_separator()
+        @@decimal_separator ||= self.decimal_separator()
         match[0].tr('.', @@decimal_separator).to_l
       when 2
         Area.send( unit_full.intern, value )
@@ -43,8 +55,6 @@ module Example
         raise ArgumentError, 'Invalid unit format #{unit_full.inspect}'
       end
     end
-
-    private
 
     # Dirty hack extracting guessing the decimal separator of the current locale.
     # Assumes that only . and , are possible values.
