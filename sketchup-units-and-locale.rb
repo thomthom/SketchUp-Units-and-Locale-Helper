@@ -2,10 +2,10 @@ module Example
 
   # Helper module for dealing with locale data and unit conversions.
   module Locale
-  
+
     extend self
 
-    # Model Units set to Meters with precision 0,000:
+    # Model Units set to Centimeters with precision 0,000:
     #
     #   Locale.string_to_unit( '123.345cm' )
     #   => "123,345cm"
@@ -15,6 +15,12 @@ module Example
     #
     #   Locale.string_to_unit( '123.345cm3' )
     #   => "123,345 Centimeters ³""
+    #
+    #   Locale.string_to_unit( '123.345cm³' )
+    #   => "123,345 Centimeters ³""
+    #
+    #   Locale.string_to_unit( '123 456.345cm3' )
+    #   => "123456,345 Centimeters ³""
     #
     # @param [String] string
     #
@@ -361,7 +367,7 @@ module Example
   #   => "4,5m"
   #
   #   area = Volume.m3(27) / 9.m
-  #   => "3 Meters ²"  
+  #   => "3 Meters ²"
   class Volume
 
     include Comparable
@@ -607,8 +613,8 @@ module Example
       end # case units_options['LengthFormat']
 
       # (!) Hack
-      # Names of units are probably translated. Extract current units string from
-      # Sketchup.format_area(0). Currently overrides the manual formatting.
+      # Names of units are probably translated. Extract current units string
+      # from Sketchup.format_area(0). Currently overrides the manual formatting.
       # Test if it works properly. Otherwise revert to English.
       current_unit = Sketchup.format_area(0).match(/^0 (\S+) /)[1]
       formatted_value = "#{format_float(value, true)} #{current_unit} ³"
