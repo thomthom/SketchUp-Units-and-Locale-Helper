@@ -26,7 +26,7 @@ module Example
     #
     # @return [Volume] if unit marker ends with 3. ( +'123.cm3'+ )
     # @return [Area] if unit marker ends with 2. ( +'123.cm2'+ )
-    # @return [Length] if there is no dimmension marker.
+    # @return [Length] if there is no dimension marker.
     def self.string_to_unit( string )
       # Make string easier to parse by normalising characters.
       data = string.gsub('²','2').gsub('³','3').gsub(/\s+/,'')
@@ -46,7 +46,7 @@ module Example
       #puts "      Value: #{value}"
       #puts "Unit (Full): #{unit_full}"
       #puts "       Unit: #{unit}"
-      #puts " Dimmension: #{dimmension}"
+      #puts " Dimension: #{dimension}"
       # </debug>
       # Convert into appropriate class.
       case dimmension
@@ -62,8 +62,8 @@ module Example
       end
     end
 
-    # Dirty hack extracting guessing the decimal separator of the current locale.
-    # Assumes that only . and , are possible values.
+    # Dirty hack extracting guessing the decimal separator of the current
+    # locale. Assumes that only . and , are possible values.
     #
     # @return [String]
     def decimal_separator
@@ -82,17 +82,17 @@ module Example
     end
 
     # Formats the given float to a string with the user's locale decimal
-    # delimitor and with the precision given in the model's option for lengths.
+    # delimiter and with the precision given in the model's option for lengths.
     #
     # @param [Float] string
     # @param [Boolean] trim Trims trailing zeros. (For area and volume in SketchUp.)
-    # @param [Sketchup::Model, Integer] model Sketchup model to use model settings
+    # @param [Sketchup::Model, Integer] model SketchUp model to use model settings
     #   or fixed precision if an integer is given.
     #
     # @return [String]
     def format_float( float, trim = false, model = Sketchup.active_model )
-      # For areas and volumes, SketchUp drops the trailing zeros after the decimal
-      # separator.
+      # For areas and volumes, SketchUp drops the trailing zeros after the
+      # decimal separator.
       @@decimal_separator ||= decimal_separator()
       if model.is_a?( Sketchup::Model )
         precision = model.options['UnitsOptions']['LengthPrecision']
