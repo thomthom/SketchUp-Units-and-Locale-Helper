@@ -575,38 +575,39 @@ module Example
       #
       case units_options['LengthFormat']
 
-      when 0 # Decimal
+      when Length::Decimal
         case units_options['LengthUnit']
-        when 0 # Inches
+        when Length::Inches
           value = self.to_inch3
-        when 1 # Feet
+        when Length::Feet
           value = self.to_feet3
-        when 2 # Millimeters
+        when Length::Millimeter
           # (?) SketchUp rounds millimeters squared, but not cubed.
           value = self.to_mm3
-        when 3 # Centimeters
+        when Length::Centimeter
           value = self.to_cm3
-        when 4 # Meters
+        when Length::Meter
           value = self.to_m3
         end
         index = units_options['LengthUnit']
         postfix = %w{Inches Feet Millimeters Centimeters Meters}[index]
         formatted_value = "#{format_float(value, true)} #{postfix} ³"
 
-      when 1 # Architectrual
+      when Length::Architectural
         value = self.to_feet3
         if value < 1.0
+          # When we have less than a foot, display inches instead.
           value = self.to_inch3
           formatted_value = "#{format_float(value, true)} Inches ³"
         else
           formatted_value = "#{format_float(value, true)} Feet ³"
         end
 
-      when 2 # Engineering
+      when Length::Engineering
         value = self.to_feet3
         formatted_value = "#{format_float(value, true)} Feet ³"
 
-      when 3 # Fractional
+      when Length::Fractional
         value = self.to_inch3
         formatted_value = "#{format_float(value, true)} Inches ³"
 
