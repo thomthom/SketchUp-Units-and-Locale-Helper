@@ -616,7 +616,9 @@ module Example
       # Names of units are probably translated. Extract current units string
       # from Sketchup.format_area(0). Currently overrides the manual formatting.
       # Test if it works properly. Otherwise revert to English.
-      current_unit = Sketchup.format_area(0).match(/^0 (\S+) /)[1]
+      # NOTE: Before SketchUp 2014 Sketchup.format_area(0) would yield
+      #       "0 Millimeters ²". After that it returned "0 mm²".
+      current_unit = Sketchup.format_area(0).match(/^0 (\S+)\s*²/)[1]
       formatted_value = "#{format_float(value, true)} #{current_unit} ³"
 
       formatted_value
