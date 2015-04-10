@@ -561,7 +561,7 @@ module Example
       #    3 : Centimeters
       #    4 : Meters
       #
-      # 1 : Architectrual (Force display of 0")
+      # 1 : Architectural (Force display of 0")
       # => LengthUnit
       #    0 : Inches
       #
